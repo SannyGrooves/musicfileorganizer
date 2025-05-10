@@ -26,6 +26,8 @@ o	Format Priority (if added): Select priority preset (e.g., "Lossless" or "MP3Fi
 4.	Stop: Click Stop to cancel processing (saves partial logs).
 5.	Exit: Click Exit to save logs and close.
 6.	Check the HTML log file (MusicFileOrganizer_Log_*.html) for messages confirming the selection of highest quality files and their new paths.
+7.	![image](https://github.com/user-attachments/assets/4b3b696a-d47b-4d53-a4e6-adc0aed7aad5)
+
 # Outputs:
 •	Organized files in destination folder, each in a subfolder named after the sanitized filename.
 •	Batch logs: MusicFileOrganizer_Log_<timestamp>_batchN.html.
