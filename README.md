@@ -1,4 +1,3 @@
-![image](https://github.com/user-attachments/assets/a074d03e-e18e-4e0e-bd46-9bd04b5eea6c)
 How It Works
 •	When "BEST" Is Appended: 
 o	If the "Move Highest Quality Duplicate (Size & Bitrate)" checkbox ($useHighestQuality) is checked and a group (similarity or file group) contains more than one file ($duplicateCount -gt 1), the script selects the file with the largest size and highest bitrate.
@@ -72,7 +71,7 @@ o	Steps:
 1.	Add a regex replacement list to $removeList for patterns like dates or parenthetical text.
 2.	Integrate metadata extraction using a library like TagLibSharp (already assumed available via Install-Dependencies).
 3.	Make term removal case-sensitive by adjusting the -replace operation.
-o	Example Change: 
+Example Change: 
 powershell
 Kopiëren
 # Original (line ~934–947)
