@@ -49,24 +49,24 @@ Recommended Buffer Size and Batch Size for Audio Files
 •	Buffer Size: 
 o	Current: 16MB, optimized for 20MB–100MB audio files.
 # Recommendation: 
-•	8MB: For low-memory systems (e.g., <8GB RAM) or small files (<20MB).
-•	16MB: Balanced default for typical audio files (20MB–100MB) and most systems.
-•	32MB: For high-performance systems (16GB+ RAM) and large files (>100MB).
-•	64MB: For very large files (>500MB, e.g., high-resolution WAV) on systems with 32GB+ RAM.
+8MB: For low-memory systems (e.g., <8GB RAM) or small files (<20MB).
+16MB: Balanced default for typical audio files (20MB–100MB) and most systems.
+32MB: For high-performance systems (16GB+ RAM) and large files (>100MB).
+64MB: For very large files (>500MB, e.g., high-resolution WAV) on systems with 32GB+ RAM.
 # Recommendation Buffer: 
-•	100MB: For low-memory systems or small datasets (<10GB).
-•	300MB: Default for typical datasets (10GB–60GB) and 8GB+ RAM.
-•	500MB: For large datasets (>60GB) on systems with 16GB+ RAM.
-•	1000MB: For very large datasets (>100GB) on high-end systems (32GB+ RAM).
-•    Buffer size: 8MB (low memory), 
-•    16MB (default, 20MB–100MB files), 
-•    32MB (high performance),
-•    64MB (large files, 32GB+ RAM)
+100MB: For low-memory systems or small datasets (<10GB).
+•300MB: Default for typical datasets (10GB–60GB) and 8GB+ RAM.
+500MB: For large datasets (>60GB) on systems with 16GB+ RAM.
+1000MB: For very large datasets (>100GB) on high-end systems (32GB+ RAM).
+Buffer size: 8MB (low memory), 
+16MB (default, 20MB–100MB files), 
+32MB (high performance),
+64MB (large files, 32GB+ RAM)
 # Recommendation Batch size: 
-•     100MB (low memory), 
-•     300MB (default, 10GB–60GB), 
-•     500MB (large datasets), 
-•     1000MB (100GB+, 32GB+ RAM)
+100MB (low memory), 
+300MB (default, 10GB–60GB), 
+500MB (large datasets), 
+1000MB (100GB+, 32GB+ RAM)
 Process a 60GB dataset with 300MB batch and 32MB buffer, then try 100MB batch and 8MB buffer on a low-memory system to compare stability.
 <!DOCTYPE html>
 <html lang="en">
