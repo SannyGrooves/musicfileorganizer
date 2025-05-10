@@ -180,41 +180,6 @@ o	Location: Modify the $bufferSizeBytes assignment in the Start button’s Add_C
 o	Steps: 
 1.	Change 16MB to a different value (e.g., 32MB for faster copying on high-performance systems).
 2.	Optionally, add a GUI textbox for user input, similar to $batchTextBox.
-
-# Original (line ~784)
-$bufferSizeBytes = 16MB
-
-# Updated
-$bufferSizeBytes = 32MB # Increased for faster copying
-
-# Optional: Add GUI textbox (before Start button, e.g., line ~590)
-$bufferLabel = New-Object System.Windows.Forms.Label
-$bufferLabel.Location = New-Object System.Drawing.Point(30, 530)
-$bufferLabel.Size = New-Object System.Drawing.Size(150, 20)
-$bufferLabel.Text = "Buffer Size (MB):"
-$form.Controls.Add($bufferLabel)
-
-$bufferTextBox = New-Object System.Windows.Forms.TextBox
-$bufferTextBox.Location = New-Object System.Drawing.Point(180, 530)
-$bufferTextBox.Size = New-Object System.Drawing.Size(100, 20)
-$bufferTextBox.Text = "32"
-$form.Controls.Add($bufferTextBox)
-
-# Update Start button to use textbox (line ~784)
-$bufferSizeMB = 32
-try {
-    $bufferSizeMB = [double]$bufferTextBox.Text
-    if ($bufferSizeMB -lt 1 -or $bufferSizeMB -gt 128) {
-        Write-Log -Message "Error: Buffer size must be between 1 and 128 MB." -Status "Error"
-        $startButton.Enabled = $true
-        $stopButton.Enabled = $false
-        return
-    }
-} catch {
-    Write-Log -Message "Error: Invalid buffer size '$($bufferTextBox.Text)'. Using default 32 MB." -Status "Warning"
-    $bufferSizeMB = 32
-}
-$bufferSizeBytes = [int64]($bufferSizeMB * 1MB)
 o	Impact: Increases copying speed for large files but may raise memory usage. Test with a 100MB .flac file to compare.
 # performance.
 Recommended Buffer Size and Batch Size for Audio Files
@@ -225,24 +190,21 @@ o	Recommendation:
 	16MB: Balanced default for typical audio files (20MB–100MB) and most systems.
 	32MB: For high-performance systems (16GB+ RAM) and large files (>100MB).
 	64MB: For very large files (>500MB, e.g., high-resolution WAV) on systems with 32GB+ RAM.
-o	Rationale: Larger buffers reduce disk I/O overhead but increase memory usage. Audio files are typically 20MB–100MB, so 16MB–32MB is ideal for most use cases.
-•	Batch Size: 
-o	Current: 300MB, user-configurable via $batchTextBox (10MB–1000MB).
-o	Recommendation: 
+# Recommendation Buffer: 
 	100MB: For low-memory systems or small datasets (<10GB).
 	300MB: Default for typical datasets (10GB–60GB) and 8GB+ RAM.
 	500MB: For large datasets (>60GB) on systems with 16GB+ RAM.
 	1000MB: For very large datasets (>100GB) on high-end systems (32GB+ RAM).
-o	Rationale: Batch size controls memory usage during file enumeration and processing. Smaller batches reduce memory spikes, while larger batches improve throughput for big datasets.
-# How to Implement: 
-o	Update comments or add a GUI tooltip to guide users on recommended sizes.
-o	Example comment in Start button (line ~784): 
+    Buffer size: 8MB (low memory), 
+    16MB (default, 20MB–100MB files), 
+    32MB (high performance),
+    64MB (large files, 32GB+ RAM)
+# Recommendation Batch size: 
+     100MB (low memory), 
+     300MB (default, 10GB–60GB), 
+     500MB (large datasets), 
+     1000MB (100GB+, 32GB+ RAM)
 
-# Buffer size: 8MB (low memory), 16MB (default, 20MB–100MB files), 32MB (high performance), 64MB (large files, 32GB+ RAM)
-$bufferSizeBytes = 32MB
-# Batch size: 100MB (low memory), 300MB (default, 10GB–60GB), 500MB (large datasets), 1000MB (100GB+, 32GB+ RAM)
-$batchSizeMB = 300
-# Recommendations: Process a 60GB dataset with 300MB batch and 32MB buffer, then try 100MB batch and 8MB buffer on a low-memory system to compare stability.
-
-
+# Recommendations: 
+Process a 60GB dataset with 300MB batch and 32MB buffer, then try 100MB batch and 8MB buffer on a low-memory system to compare stability.
 
