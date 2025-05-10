@@ -65,7 +65,9 @@ o	Current: 16MB, optimized for 20MB–100MB audio files.
 •	500MB (large datasets), 
 •	1000MB (100GB+, 32GB+ RAM)
 Process a 60GB dataset with 300MB batch and 32MB buffer, then try 100MB batch and 8MB buffer on a low-memory system to compare stability.
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <h1>Music File Organizer Log</h1>
     <div class="summary">
         <span>Successful Operations: 67</span>
