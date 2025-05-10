@@ -65,28 +65,7 @@ o	Current: 16MB, optimized for 20MB–100MB audio files.
 •	500MB (large datasets), 
 •	1000MB (100GB+, 32GB+ RAM)
 Process a 60GB dataset with 300MB batch and 32MB buffer, then try 100MB batch and 8MB buffer on a low-memory system to compare stability.
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music File Organizer Log</title>
-    <style>
-        body { background: linear-gradient(135deg, #1a1a1a, #2a2a2a); color: #ffffff; font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; line-height: 1.6; }
-        h1 { text-align: center; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
-        .summary { background: #333333; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
-        .summary span { font-size: 1.2em; margin: 0 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #333333; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #555555; }
-        th { background: #444444; color: #ffffff; text-transform: uppercase; letter-spacing: 1px; }
-        tr:hover { background: #3a3a3a; }
-        .status-success { color: #28a745; font-weight: bold; }
-        .status-error { color: #dc3545; font-weight: bold; }
-        .status-info { color: #17a2b8; font-weight: bold; }
-        footer { text-align: center; margin-top: 20px; color: #aaaaaa; font-size: 0.9em; }
-    </style>
-</head>
-<body>
+
     <h1>Music File Organizer Log</h1>
     <div class="summary">
         <span>Successful Operations: 67</span>
