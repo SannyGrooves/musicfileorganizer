@@ -8,7 +8,7 @@ Purpose: Organizes audio files into folders based on sanitized filenames, with o
 # Installation:
 1.	Save MusicFileOrganizer.ps1 to a directory.
 2.	Run in PowerShell: .\MusicFileOrganizer.ps1.
-3.	The script installs dependencies (TagLibSharp) if needed.
+3.	The script installs dependencies if needed.
 # Usage:
 1.	Launch: Run the script to open the GUI.
 2.	Configure: 
@@ -25,6 +25,7 @@ o	Format Priority (if added): Select priority preset (e.g., "Lossless" or "MP3Fi
 3.	Start: Click Start to process files.
 4.	Stop: Click Stop to cancel processing (saves partial logs).
 5.	Exit: Click Exit to save logs and close.
+6.	Check the HTML log file (MusicFileOrganizer_Log_*.html) for messages confirming the selection of highest quality files and their new paths.
 # Outputs:
 •	Organized files in destination folder, each in a subfolder named after the sanitized filename.
 •	Batch logs: MusicFileOrganizer_Log_<timestamp>_batchN.html.
@@ -34,33 +35,41 @@ o	Format Priority (if added): Select priority preset (e.g., "Lossless" or "MP3Fi
 •	Slow Processing: Reduce batch size (e.g., 100MB) or buffer size (e.g., 8MB) for low-memory systems.
 •	Message Loop Error: Avoid running multiple instances; ensure dialogs close properly.
 
-# How It Works
-•	When "BEST" Is Appended: 
-o	If the "Move Highest Quality Duplicate (Size & Bitrate)" checkbox ($useHighestQuality) is checked and a group (similarity or file group) contains more than one file ($duplicateCount -gt 1), the script selects the file with the largest size and highest bitrate.
-o	This file’s destination filename is modified to include "_BEST" (e.g., SongName_BEST.mp3).
-o	Other files in the group (duplicates) retain their original filenames and are moved to the "Duplicates" folder (for similarity groups) or skipped (for file groups).
-•	When "BEST" Is Not Appended: 
-o	If $useHighestQuality is $false or the group has only one file, the filename remains unchanged (no "_BEST" suffix).
-o	The file is processed as before, moved to its designated folder without modification.
-•	Sanitization: 
-o	The Sanitize-Filename function is called on the modified filename to ensure it’s safe for the filesystem, handling cases where "BEST" might introduce invalid characters (though unlikely).
-# Testing the Change
-1.	Setup: 
-o	Save the script as MusicFileOrganizer.ps1.
-o	Create a source directory with multiple audio files, including duplicates with different sizes and bitrates (e.g., Song.mp3 at 128kbps/2MB, Song.mp3 at 320kbps/5MB).
-# 	Run the Script: 
-o	Open the script in PowerShell and run it (e.g., .\MusicFileOrganizer.ps1).
-o	In the UI, select the source and destination directories.
-o	Check the "Move Highest Quality Duplicate (Size & Bitrate)" checkbox.
-o	Optionally enable "Check for Duplicated Songs by Name" to test similarity groups.
-o	Click "Start".
-3.	Verify Output: 
-o	In the destination directory, check that the highest quality file in each duplicate group has "_BEST" in its filename (e.g., Song_BEST.mp3).
-o	For similarity groups, other duplicates should be in the "Duplicates" subfolder with their original names.
-o	For file groups, only the best file should be moved, with "_BEST" appended, and others skipped.
-o	Check the HTML log file (MusicFileOrganizer_Log_*.html) for messages confirming the selection of highest quality files and their new paths.
-4.	Debugging: 
-o	Use the breakpoints (e.g., lines 899 and 993) in VS Code or PowerShell ISE to step through the similarity and file.
+
+# Change Buffer Size
+The buffer size for file copying is fixed at 16MB ($bufferSizeBytes = 16MB, line ~784).
+•	How to Edit: 
+o	Location: Modify the $bufferSizeBytes assignment in the Start button’s Add_Click event (line ~784).
+o	Steps: 
+1.	Change 16MB to a different value (e.g., 32MB for faster copying on high-performance systems).
+2.	Optionally, add a GUI textbox for user input, similar to $batchTextBox.
+o	Impact: Increases copying speed for large files but may raise memory usage. Test with a 100MB .flac file to compare.
+# performance.
+Recommended Buffer Size and Batch Size for Audio Files
+•	Buffer Size: 
+o	Current: 16MB, optimized for 20MB–100MB audio files.
+o	Recommendation: 
+	8MB: For low-memory systems (e.g., <8GB RAM) or small files (<20MB).
+	16MB: Balanced default for typical audio files (20MB–100MB) and most systems.
+	32MB: For high-performance systems (16GB+ RAM) and large files (>100MB).
+	64MB: For very large files (>500MB, e.g., high-resolution WAV) on systems with 32GB+ RAM.
+# Recommendation Buffer: 
+	100MB: For low-memory systems or small datasets (<10GB).
+	300MB: Default for typical datasets (10GB–60GB) and 8GB+ RAM.
+	500MB: For large datasets (>60GB) on systems with 16GB+ RAM.
+	1000MB: For very large datasets (>100GB) on high-end systems (32GB+ RAM).
+    Buffer size: 8MB (low memory), 
+    16MB (default, 20MB–100MB files), 
+    32MB (high performance),
+    64MB (large files, 32GB+ RAM)
+# Recommendation Batch size: 
+     100MB (low memory), 
+     300MB (default, 10GB–60GB), 
+     500MB (large datasets), 
+     1000MB (100GB+, 32GB+ RAM)
+Process a 60GB dataset with 300MB batch and 32MB buffer, then try 100MB batch and 8MB buffer on a low-memory system to compare stability.
+
+==============================================Custom mod======================================================
 # group processing.
 o	Inspect $destFilename, $bestFile, and $isBestFile (for similarity groups) or $entry.File.FullName -eq $bestFile.File.FullName (for file groups) to confirm that "_BEST" is applied correctly.
 o	Verify that $destFile reflects the modified filename in the log messages.
@@ -173,38 +182,3 @@ function Get-FormatPriority {
     return $script:priorityMap[$selectedPriority][$Extension.ToLower()] ?? 10
 }
 o	Impact: Expands file type support. Test with .m4a and .aac files to ensure they are processed and prioritized correctly.
-# Change Buffer Size
-The buffer size for file copying is fixed at 16MB ($bufferSizeBytes = 16MB, line ~784).
-•	How to Edit: 
-o	Location: Modify the $bufferSizeBytes assignment in the Start button’s Add_Click event (line ~784).
-o	Steps: 
-1.	Change 16MB to a different value (e.g., 32MB for faster copying on high-performance systems).
-2.	Optionally, add a GUI textbox for user input, similar to $batchTextBox.
-o	Impact: Increases copying speed for large files but may raise memory usage. Test with a 100MB .flac file to compare.
-# performance.
-Recommended Buffer Size and Batch Size for Audio Files
-•	Buffer Size: 
-o	Current: 16MB, optimized for 20MB–100MB audio files.
-o	Recommendation: 
-	8MB: For low-memory systems (e.g., <8GB RAM) or small files (<20MB).
-	16MB: Balanced default for typical audio files (20MB–100MB) and most systems.
-	32MB: For high-performance systems (16GB+ RAM) and large files (>100MB).
-	64MB: For very large files (>500MB, e.g., high-resolution WAV) on systems with 32GB+ RAM.
-# Recommendation Buffer: 
-	100MB: For low-memory systems or small datasets (<10GB).
-	300MB: Default for typical datasets (10GB–60GB) and 8GB+ RAM.
-	500MB: For large datasets (>60GB) on systems with 16GB+ RAM.
-	1000MB: For very large datasets (>100GB) on high-end systems (32GB+ RAM).
-    Buffer size: 8MB (low memory), 
-    16MB (default, 20MB–100MB files), 
-    32MB (high performance),
-    64MB (large files, 32GB+ RAM)
-# Recommendation Batch size: 
-     100MB (low memory), 
-     300MB (default, 10GB–60GB), 
-     500MB (large datasets), 
-     1000MB (100GB+, 32GB+ RAM)
-
-# Recommendations: 
-Process a 60GB dataset with 300MB batch and 32MB buffer, then try 100MB batch and 8MB buffer on a low-memory system to compare stability.
-
